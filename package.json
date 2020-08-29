@@ -1,0 +1,11 @@
+{
+  "name": "jaro-winkler-typescript",
+  "version": "0.0.1",
+  "description": "Jaro-Winkler typescript implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Benny Wong",
+  "license": "ISC"
+}
