@@ -1,16 +1,16 @@
 // Reference: https://www.geeksforgeeks.org/jaro-and-jaro-winkler-similarity/
 
 interface Options {
-    caseSensitive: boolean; 
+  caseSensitive: boolean;
 }
 
 /**
- * 
+ *
  * @param str1 String 1 for compare
  * @param str2 String 2 for compare
  * @param options to control case sensitive or not
  */
-export function jaro (str1: string, str2: string, options?: Options) : number {
+export function jaro(str1: string, str2: string, options?: Options): number {
   // Exit early if either are empty.
   if (str1.length === 0 || str2.length === 0) {
     return 0;
@@ -35,9 +35,9 @@ export function jaro (str1: string, str2: string, options?: Options) : number {
   const len2: number = str2.length;
 
   // Maximum distance
-  const window: number = (Math.floor(Math.max(len1, len2) / 2)) - 1;
+  const window: number = Math.floor(Math.max(len1, len2) / 2) - 1;
 
-  // Hash for matches 
+  // Hash for matches
   const str1Hash: boolean[] = new Array(len1);
   const str2Hash: boolean[] = new Array(len2);
 
@@ -74,16 +74,16 @@ export function jaro (str1: string, str2: string, options?: Options) : number {
 
   t /= 2;
 
-  return ((m / len1) + (m / len2) + ((m - t) / m)) / 3;
+  return (m / len1 + m / len2 + (m - t) / m) / 3;
 }
 
 /**
- * 
+ *
  * @param str1 String 1 for compare
  * @param str2 String 2 for compare
  * @param options to control case sensitive or not
  */
-export function jaroWinkler(str1: string, str2: string, options?: Options) : number {
+export function jaroWinkler(str1: string, str2: string, options?: Options): number {
   // Jaro Distance
   let jaroDist: number = jaro(str1, str2, options);
   // Same prefix length, maxium is 4
@@ -101,4 +101,4 @@ export function jaroWinkler(str1: string, str2: string, options?: Options) : num
   }
 
   return jaroDist;
-};
+}
