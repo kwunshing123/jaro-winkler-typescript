@@ -66,7 +66,7 @@ export function jaro (str1: string, str2: string, options?: Options) : number {
             point++;
         }
 
-        if (str1.charAt(i) != str1.charAt(point++)) {
+        if (str1.charAt(i) != str2.charAt(point++)) {
             t++;
         }
       }
