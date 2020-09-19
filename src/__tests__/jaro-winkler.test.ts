@@ -24,6 +24,22 @@ test('Jaro-winkler: Str2 longer than Str1 case', () => {
     expect(jaroWinkler('a', 'ab')).toBe(0.8500000000000001);
 });
 
+test('Jaro: Case Sensitive', () => {
+    expect(jaro('AB', 'ab')).toBe(0);
+});
+
+test('Jaro-winkler: Case Sensitive', () => {
+    expect(jaroWinkler('AB', 'ab')).toBe(0);
+});
+
+test('Jaro: Non-case Sensitive', () => {
+    expect(jaro('AB', 'ab', { caseSensitive: false})).toBe(1);
+});
+
+test('Jaro-winkler: Non-case Sensitive', () => {
+    expect(jaroWinkler('AB', 'ab', { caseSensitive: false})).toBe(1);
+});
+
 test('Jaro Normal Case', () => {
     expect(jaro('TRATE', 'TRACE')).toBe(0.8666666666666667);
 });
