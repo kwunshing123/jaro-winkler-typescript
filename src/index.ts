@@ -1,8 +1,16 @@
+// Reference: https://www.geeksforgeeks.org/jaro-and-jaro-winkler-similarity/
+
 interface Options {
     caseSensitive: boolean; 
 }
 
-export default (str1: string, str2: string, options?: Options) : number => {
+/**
+ * 
+ * @param str1 String 1 for compare
+ * @param str2 String 2 for compare
+ * @param options to control case sensitive or not
+ */
+export function jaro (str1: string, str2: string, options?: Options) : number {
     // Exit early if either are empty.
     if (str1.length === 0 || str2.length === 0) {
       return 0;
@@ -14,27 +22,30 @@ export default (str1: string, str2: string, options?: Options) : number => {
       str2 = str2.toUpperCase();
     }
 
-    // Exit early if they're an exact match.
+    // Exact match
     if (str1 === str2) {
       return 1;
     }
 
-    let m = 0;
-    let i;
-    let j;
+    // Number of matches
+    let m: number = 0;
 
-    let range = (Math.floor(Math.max(str1.length, str2.length) / 2)) - 1;
-    let str1Matches = new Array(str1.length);
-    let str2Matches = new Array(str2.length);
+    // Length of two Strings
+    const len1: number = str1.length;
+    const len2: number = str2.length;
 
-    for (i = 0; i < str1.length; i++) {
-      let low  = (i >= range) ? i - range : 0;
-      let high = (i + range <= (str2.length - 1)) ? (i + range) : (str2.length - 1);
+    // Maximum distance
+    const window: number = (Math.floor(Math.max(len1, len2) / 2)) - 1;
 
-      for (j = low; j <= high; j++) {
-        if (!str1Matches[i] && !str2Matches[j] && str1[i] === str2[j]) {
+    // Hash for matches 
+    let str1Hash: boolean[] = new Array(len1);
+    let str2Hash: boolean[] = new Array(len2);
+
+    for (let i = 0; i < len1; i++) {
+      for (let j = Math.max(0, i - window); j <= Math.min(len2, i + window + 1); j++) {
+        if (!str1Hash[i] && !str2Hash[j] && str1[i] === str2[j]) {
           ++m;
-          str1Matches[i] = str2Matches[j] = true;
+          str1Hash[i] = str2Hash[j] = true;
           break;
         }
       }
@@ -46,35 +57,48 @@ export default (str1: string, str2: string, options?: Options) : number => {
     }
 
     // Count the transpositions.
-    let k = 0;
-    let numTrans = 0;
+    let t = 0;
+    let point = 0;
 
-    for (i = 0; i < str1.length; i++) {
-      if (str1Matches[i]) {
-        for (j = k; j < str2.length; j++) {
-          if (str2Matches[j]) {
-            k = j + 1;
-            break;
-          }
+    for (let i = 0; i < len1; i++) {
+      if (str1Hash[i]) {
+        while (!str2Hash[point]) {
+            point++;
         }
 
-        if (str1[i] !== str2[j]) {
-          ++numTrans;
+        if (str1.charAt(i) != str1.charAt(point++)) {
+            t++;
         }
       }
     }
 
-    let weight = (m / str1.length + m / str2.length + (m - (numTrans / 2)) / m) / 3;
-    let l = 0;
-    let p = 0.1;
+    t /= 2;
 
-    if (weight > 0.7) {
-      while (str1[l] === str2[l] && l < 4) {
-        ++l;
-      }
+    return ((m / len1) + (m / len2) + ((m - t) / m)) / 3;
+}
 
-      weight = weight + l * p * (1 - weight);
+/**
+ * 
+ * @param str1 String 1 for compare
+ * @param str2 String 2 for compare
+ * @param options to control case sensitive or not
+ */
+export function jaroWinkler(str1: string, str2: string, options?: Options) : number {
+    // Jaro Distance
+    let jaroDist: number = jaro(str1, str2, options);
+    // Same prefix length, maxium is 4
+    let prefix: number = 0;
+
+    if (jaroDist > 0.7) {
+        const minIndex = Math.min(str1.length, str2.length);
+        let i = 0;
+        while (str1[i] === str2[i] && i < 4 && i < minIndex) {
+            ++prefix;
+            i++;
+        }
+
+        jaroDist += 0.1 * prefix * (1 - jaroDist);
     }
 
-    return weight;
+    return jaroDist;
 };
