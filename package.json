@@ -19,7 +19,13 @@
     "type": "git",
     "url": "git+https://github.com/kwunshing123/jaro-winkler-typescript.git"
   },
-  "keywords": [],
+  "keywords": [
+    "Jaro",
+    "Jaro Winkler",
+    "typescript",
+    "string similarity",
+    "string"
+  ],
   "author": "Benny Wong",
   "license": "ISC",
   "bugs": {
