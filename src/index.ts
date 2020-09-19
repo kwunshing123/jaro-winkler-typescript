@@ -38,8 +38,8 @@ export function jaro (str1: string, str2: string, options?: Options) : number {
     const window: number = (Math.floor(Math.max(len1, len2) / 2)) - 1;
 
     // Hash for matches 
-    let str1Hash: boolean[] = new Array(len1);
-    let str2Hash: boolean[] = new Array(len2);
+    const str1Hash: boolean[] = new Array(len1);
+    const str2Hash: boolean[] = new Array(len2);
 
     for (let i = 0; i < len1; i++) {
       for (let j = Math.max(0, i - window); j <= Math.min(len2, i + window + 1); j++) {
